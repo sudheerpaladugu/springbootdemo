@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products
+  labels:
+    app: products
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products
+  template:
+    metadata:
+      name: products
+      labels:
+        app: products
+    spec:
+      containers:
+        - image: sdrpaladu/demo.initial:latest
+          imagePullPolicy: Always
+          name: nodejs
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products
+  labels:
+     app: products
+spec:
+  type: NodePort
+  selector:
+    app: products
+  ports:
+    - port: 8080
+      nodePort: 30120
+      protocol: TCP
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: products-ingress
+  annotations:
+    #nginx.ingress.kubernetes.io/rewrite-target: / ## this is for non-context root applications
+    nginx.ingress.kubernetes.io/app-root: /demo
+spec:
+  rules:
+  - host: products.local
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: products
+          servicePort: 8080

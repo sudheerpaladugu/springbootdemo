@@ -1,3 +1,4 @@
-/target
-mvw*
+/target*
+*mvnw*
 *.class
+.settings

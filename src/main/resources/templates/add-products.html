@@ -15,7 +15,7 @@
                var requestJSON = JSON.stringify(productmodel);
                $.ajax({
                   type : "POST",
-                  url : "http://localhost:8080/products",
+                  url : "http://products.local/demo/products",
                   headers : {
                      "Content-Type" : "application/json"
                   },
@@ -32,6 +32,6 @@
    </head>
    
    <body>
-      <button>Click here to submit the form</button>
+      <button style="color:blue;font-face:bold;">Click here to submit the form</button>
    </body>
 </html>
